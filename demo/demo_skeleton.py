@@ -5,6 +5,7 @@ import os.path as osp
 import shutil
 import warnings
 
+import time
 import cv2
 import mmcv
 import numpy as np
@@ -286,7 +287,9 @@ def main():
         fake_anno['keypoint'] = keypoint
         fake_anno['keypoint_score'] = keypoint_score
 
+    t0 = time.time()
     results = inference_recognizer(model, fake_anno)
+    print('cost: ', time.time()-t0, ' secs')
 
     action_label = label_map[results[0][0]]
     print(label_map)
