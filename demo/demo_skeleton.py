@@ -289,10 +289,11 @@ def main():
 
     t0 = time.time()
     results = inference_recognizer(model, fake_anno)
-    print('cost: ', time.time()-t0, ' secs')
+    print('\ncost: ', time.time()-t0, ' secs')
+    print(results, '\n')
 
     action_label = label_map[results[0][0]]
-    print(label_map)
+    # print(label_map)
 
     pose_model = init_pose_model(args.pose_config, args.pose_checkpoint,
                                  args.device)
