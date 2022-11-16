@@ -14,4 +14,5 @@ class ResNet3dSlowOnly(ResNet3d):
     """
 
     def __init__(self, conv1_kernel=(1, 7, 7), inflate=(0, 0, 1, 1), **kwargs):
+        print('\n----- building ---- ResNet3dSlowOnly\n')
         super().__init__(conv1_kernel=conv1_kernel, inflate=inflate, **kwargs)
