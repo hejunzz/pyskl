@@ -289,6 +289,7 @@ def main():
     results = inference_recognizer(model, fake_anno)
 
     action_label = label_map[results[0][0]]
+    print(label_map)
 
     pose_model = init_pose_model(args.pose_config, args.pose_checkpoint,
                                  args.device)
