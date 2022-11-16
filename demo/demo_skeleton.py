@@ -290,7 +290,9 @@ def main():
     t0 = time.time()
     results = inference_recognizer(model, fake_anno)
     print('\ncost: ', time.time()-t0, ' secs')
-    print(results, '\n')
+    print(len(fake_anno['keypoint_score'][0]))
+    print(fake_anno['keypoint_score'][0][0], '\n')
+    print(fake_anno['keypoint'][0][0], '\n')
 
     action_label = label_map[results[0][0]]
     # print(label_map)
