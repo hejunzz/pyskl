@@ -287,7 +287,7 @@ def main():
         fake_anno['keypoint'] = keypoint
         fake_anno['keypoint_score'] = keypoint_score
 
-    print(fake_anno['keypoint_score'].shape)
+    print('\n', fake_anno['keypoint'].shape)
     print(fake_anno['keypoint_score'][0][0], '\n')
     print(fake_anno['keypoint'][0][0], '\n')
 
