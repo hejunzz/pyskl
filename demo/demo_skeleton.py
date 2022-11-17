@@ -287,12 +287,14 @@ def main():
         fake_anno['keypoint'] = keypoint
         fake_anno['keypoint_score'] = keypoint_score
 
-    t0 = time.time()
-    results = inference_recognizer(model, fake_anno)
     print('\ncost: ', time.time()-t0, ' secs')
-    print(len(fake_anno['keypoint_score'][0]))
+    print(fake_anno['keypoint_score'].shape)
     print(fake_anno['keypoint_score'][0][0], '\n')
     print(fake_anno['keypoint'][0][0], '\n')
+
+    t0 = time.time()
+    results = inference_recognizer(model, fake_anno)
+
 
     action_label = label_map[results[0][0]]
     # print(label_map)

@@ -47,8 +47,8 @@ val_pipeline = [
     dict(type='Collect', keys=['imgs', 'label'], meta_keys=[]),
     dict(type='ToTensor', keys=['imgs'])
 ]
-test_pipeline = [
-    dict(type='UniformSampleFrames', clip_len=48, num_clips=2, test_mode=True),
+test_pipeline = [ # input shape [2*num_clips, num_joints, clip_len, resize_w, resize_h]
+    dict(type='UniformSampleFrames', clip_len=48, num_clips=10, test_mode=True), 
     dict(type='PoseDecode'),
     dict(type='PoseCompact', hw_ratio=1., allow_imgpad=True),
     dict(type='Resize', scale=(64, 64), keep_ratio=False),
