@@ -603,6 +603,8 @@ class ResNet3d(nn.Module):
             torch.Tensor: The feature of the input
             samples extracted by the backbone.
         """
+        print("PoseC3D input shape: ", x.shape)
+
         x = self.conv1(x)
         x = self.maxpool(x)
         outs = []
