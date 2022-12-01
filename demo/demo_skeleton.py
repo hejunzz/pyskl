@@ -2,6 +2,8 @@
 import argparse
 import os
 import os.path as osp
+from os.path import expanduser
+
 import shutil
 import warnings
 
@@ -13,6 +15,11 @@ import torch
 from scipy.optimize import linear_sum_assignment
 
 from pyskl.apis import inference_recognizer, init_recognizer
+
+home = expanduser("~")
+vid_path = os.path.join(home, 'Documents/data/demo/video/5b1b5104-2061-4d6e-8b7c-4e297aa8afab.mp4')
+temp_path = os.path.join(home, 'Documents/data/demo/temp/output.mp4')
+
 
 try:
     from mmdet.apis import inference_detector, init_detector
@@ -59,8 +66,8 @@ LINETYPE = 1
 
 def parse_args():
     parser = argparse.ArgumentParser(description='PoseC3D demo')
-    parser.add_argument('video', help='video file/url')
-    parser.add_argument('out_filename', help='output filename')
+    # parser.add_argument('video', help='video file/url')
+    # parser.add_argument('out_filename', help='output filename')
     parser.add_argument(
         '--config',
         default='configs/posec3d/slowonly_r50_ntu120_xsub/joint.py',
@@ -99,13 +106,15 @@ def parse_args():
         default='tools/data/label_map/nturgbd_120.txt',
         help='label map file')
     parser.add_argument(
-        '--device', type=str, default='cuda:0', help='CPU/CUDA device option')
+        '--device', type=str, default='cpu', help='CPU/CUDA device option') # 'cuda:0'
     parser.add_argument(
         '--short-side',
         type=int,
         default=480,
         help='specify the short-side length of the image')
     args = parser.parse_args()
+    args.video = vid_path
+    args.out_filename = temp_path
     return args
 
 
@@ -232,11 +241,18 @@ def main():
 
     frame_paths, original_frames = frame_extraction(args.video,
                                                     args.short_side)
+    if args.device == 'cpu':
+        # we only random select 20 frames
+        p = np.random.permutation(len(frame_paths))
+        idx = p[:20]
+        idx.sort()
+        paths = [ frame_paths[i] for i in idx]
+        frame_paths = paths
     num_frame = len(frame_paths)
     h, w, _ = original_frames[0].shape
 
     config = mmcv.Config.fromfile(args.config)
-    config.data.test.pipeline = [x for x in config.data.test.pipeline if x['type'] != 'DecompressPose']
+    config.data.test.pipeline = [x for x in config.data.test.pipeline if x['type'] != 'DecompressPose'] # list of dict
     # Are we using GCN for Infernece?
     GCN_flag = 'GCN' in config.model.type
     GCN_nperson = None
@@ -251,10 +267,12 @@ def main():
 
     # Get Human detection results
     det_results = detection_inference(args, frame_paths)
-    torch.cuda.empty_cache()
+    if not args.device == 'cpu':
+        torch.cuda.empty_cache()
 
     pose_results = pose_inference(args, frame_paths, det_results)
-    torch.cuda.empty_cache()
+    if not args.device == 'cpu':
+        torch.cuda.empty_cache()
 
     fake_anno = dict(
         frame_dir='',
@@ -295,6 +313,7 @@ def main():
     results = inference_recognizer(model, fake_anno)
     print('cost: ', time.time()-t0, ' secs')
 
+    # fake_anno['imgs']: the transformed input (2D heatmap), shape 2*17*48*64*64
 
     action_label = label_map[results[0][0]]
     # print(label_map)
@@ -309,7 +328,7 @@ def main():
         cv2.putText(frame, action_label, (10, 30), FONTFACE, FONTSCALE,
                     FONTCOLOR, THICKNESS, LINETYPE)
 
-    vid = mpy.ImageSequenceClip([x[:, :, ::-1] for x in vis_frames], fps=24)
+    vid = mpy.ImageSequenceClip([x[:, :, ::-1] for x in vis_frames], fps=10)
     vid.write_videofile(args.out_filename, remove_temp=True)
 
     tmp_frame_dir = osp.dirname(frame_paths[0])

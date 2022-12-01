@@ -1,7 +1,8 @@
 import io
 
 import cv2
-import decord
+# import decord
+import videoreader as decord
 import matplotlib.pyplot as plt
 import moviepy.editor as mpy
 import numpy as np
@@ -108,7 +109,8 @@ def Vis2DPose(item, thre=0.2, out_shape=(540, 960), layout='coco', fps=24, video
         frames = [np.ones([out_shape[0], out_shape[1], 3], dtype=np.uint8) * 255 for i in range(total_frames)]
     else:
         vid = decord.VideoReader(video)
-        frames = [x.asnumpy() for x in vid]
+        # frames = [x.asnumpy() for x in vid]
+        frames = vid
         frames = [cv2.resize(x, (out_shape[1], out_shape[0])) for x in frames]
         if len(frames) != total_frames:
             frames = [frames[int(i / total_frames * len(frames))] for i in range(total_frames)]
@@ -117,6 +119,7 @@ def Vis2DPose(item, thre=0.2, out_shape=(540, 960), layout='coco', fps=24, video
         edges = [
             (0, 1, 'f'), (0, 2, 'f'), (1, 3, 'f'), (2, 4, 'f'), (0, 5, 't'), (0, 6, 't'),
             (5, 7, 'ru'), (6, 8, 'lu'), (7, 9, 'ru'), (8, 10, 'lu'), (5, 11, 't'), (6, 12, 't'),
+            (5, 6, 't'), (11, 12, 't'),
             (11, 13, 'ld'), (12, 14, 'rd'), (13, 15, 'ld'), (14, 16, 'rd')
         ]
     color_map = {

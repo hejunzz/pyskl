@@ -67,11 +67,11 @@ data = dict(
         dataset=dict(
             type=dataset_type,
             ann_file=ann_file,
-            split='xsub_train',
+            split='train',
             pipeline=train_pipeline,
             class_prob=class_prob)),
-    val=dict(type=dataset_type, ann_file=ann_file, split='xsub_val', pipeline=val_pipeline),
-    test=dict(type=dataset_type, ann_file=ann_file, split='xsub_val', pipeline=test_pipeline))
+    val=dict(type=dataset_type, ann_file=ann_file, split='val', pipeline=val_pipeline),
+    test=dict(type=dataset_type, ann_file=ann_file, split='val', pipeline=test_pipeline))
 # optimizer
 optimizer = dict(type='SGD', lr=0.4, momentum=0.9, weight_decay=0.0003)  # this lr is used for 8 gpus
 optimizer_config = dict(grad_clip=dict(max_norm=40, norm_type=2))
@@ -82,4 +82,9 @@ checkpoint_config = dict(interval=1)
 evaluation = dict(interval=1, metrics=['top_k_accuracy', 'mean_class_accuracy'], topk=(1, 5))
 log_config = dict(interval=20, hooks=[dict(type='TextLoggerHook')])
 log_level = 'INFO'
-work_dir = './work_dirs/posec3d/slowonly_r50_ntu120_xsub/joint'
+work_dir = './work_dirs/posec3d/slowonly_r50_test02_ntu120xsub_p/joint'
+# load_from = 'https://download.openmmlab.com/mmaction/skeleton/posec3d/k400_posec3d-041f49c6.pth'  # noqa: E501
+# https://download.openmmlab.com/mmaction/pyskl/ckpt/'
+#                  'posec3d/slowonly_r50_ntu120_xsub/joint.pth
+load_from = 'https://download.openmmlab.com/mmaction/skeleton/posec3d/slowonly_r50_u48_240e_ntu120_xsub_keypoint/slowonly_r50_u48_240e_ntu120_xsub_keypoint-6736b03f.pth'
+find_unused_parameters = True

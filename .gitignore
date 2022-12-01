@@ -132,3 +132,6 @@ examples/extract_diving48_skeleton/*list
 examples/extract_diving48_skeleton/*pkl
 configs/gen_config.ipynb
 dev.ipynb
+__temp__.mp4
+.DS_Store
+demo/S005C003P016R001A054.avi
