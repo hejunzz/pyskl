@@ -15,7 +15,7 @@ model = dict(
     cls_head=dict(
         type='I3DHead',
         in_channels=512,
-        num_classes=120,
+        num_classes=2,    # 120
         dropout=0.5),
     test_cfg=dict(average_clips='prob'))
 
