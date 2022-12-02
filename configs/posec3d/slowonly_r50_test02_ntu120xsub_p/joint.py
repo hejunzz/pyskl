@@ -59,7 +59,7 @@ test_pipeline = [ # input shape [2*num_clips, num_joints, clip_len, resize_w, re
     dict(type='ToTensor', keys=['imgs'])
 ]
 data = dict(
-    videos_per_gpu=32,
+    videos_per_gpu=16,  # 32, out of mem
     workers_per_gpu=4,
     test_dataloader=dict(videos_per_gpu=1),
     train=dict(
