@@ -88,4 +88,4 @@ work_dir = './work_dirs/posec3d/slowonly_r50_test02_ntu120xsub_p/joint'
 # https://download.openmmlab.com/mmaction/pyskl/ckpt/'
 #                  'posec3d/slowonly_r50_ntu120_xsub/joint.pth
 load_from = 'https://download.openmmlab.com/mmaction/skeleton/posec3d/slowonly_r50_u48_240e_ntu120_xsub_keypoint/slowonly_r50_u48_240e_ntu120_xsub_keypoint-6736b03f.pth'
-find_unused_parameters = True
+# find_unused_parameters = True
