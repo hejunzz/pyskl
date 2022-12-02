@@ -20,7 +20,8 @@ model = dict(
     test_cfg=dict(average_clips='prob'))
 
 dataset_type = 'PoseDataset'
-ann_file = 'data/nturgbd/ntu120_hrnet.pkl'
+# ann_file = 'data/nturgbd/ntu120_hrnet.pkl'
+ann_file = 'data/demo/simple_data.pkl'
 left_kp = [1, 3, 5, 7, 9, 11, 13, 15]
 right_kp = [2, 4, 6, 8, 10, 12, 14, 16]
 class_prob = [1] * 60 + [2] * 60

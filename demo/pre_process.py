@@ -174,13 +174,16 @@ for i in range(len(results)):
 annotations = []
 label2id = dict()   # fill out the dict {"label_0": 0, "label_1": 1, ...}
 max_id = 0
+train_split = []
+val_split = []
 
-for poses in temporal_pose_list:
+for i, poses in enumerate(temporal_pose_list):
     if poses['labels'] not in label2id:
         label2id[poses['labels']] = max_id
         max_id += 1
+    frame_dir = 'clip-%d'%(i)
     anno = dict(
-        frame_dir='', # used for matching the raw frames of these poses
+        frame_dir=frame_dir, # used for matching the raw frames of these poses
         label=label2id[poses['labels']],   # 
         img_shape=poses['img_shape'], #(h, w),
         original_shape=poses['img_shape'], #(h, w),
@@ -192,7 +195,9 @@ for poses in temporal_pose_list:
     anno['keypoint_score'] = poses['keypoint_score']
 
     annotations.append(anno)
+    train_split.append(frame_dir)
 
+pkl = dict(split=dict(train=train_split, val=train_split), annotations=annotations)
 
 # dump into a pickle file by mmcv.dump
-mmcv.dump(dict(train=annotations, val=annotations), ds_pickle_file)
+mmcv.dump(pkl, ds_pickle_file)
